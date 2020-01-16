@@ -99,6 +99,7 @@ gen: \
 	generate-rbac \
 	generate-authn \
 	generate-security \
+	generate-vms \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
@@ -413,6 +414,32 @@ clean-security:
 	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
 
 #####################
+# vms/...
+#####################
+
+vms_v1alpha1_path := vms/v1alpha1
+vms_v1alpha1_protos := $(wildcard $(vms_v1alpha1_path)/*.proto)
+vms_v1alpha1_pb_gos := $(vms_v1alpha1_protos:.proto=.pb.go)
+vms_v1alpha1_pb_pythons := $(patsubst $(vms_v1alpha1_path)/%.proto,$(python_output_path)/$(vms_v1alpha1_path)/%_pb2.py,$(vms_v1alpha1_protos))
+vms_v1alpha1_pb_docs := $(vms_v1alpha1_protos:.proto=.pb.html)
+vms_v1alpha1_openapi := $(vms_v1alpha1_protos:.proto=.gen.json)
+vms_v1alpha1_k8s_gos := \
+	$(patsubst $(vms_v1alpha1_path)/%.proto,$(vms_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(vms_v1alpha1_protos))) \
+	$(patsubst $(vms_v1alpha1_path)/%.proto,$(vms_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(vms_v1alpha1_protos)))
+
+
+$(vms_v1alpha1_pb_gos) $(vms_v1alpha1_pb_docs) $(vms_v1alpha1_pb_pythons) $(vms_v1alpha1_k8s_gos): $(vms_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(vms_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/vms/* vms
+
+generate-vms: $(vms_v1alpha1_pb_gos) $(vms_v1alpha1_pb_docs) $(vms_v1alpha1_pb_pythons) $(vms_v1alpha1_k8s_gos)
+
+clean-vms:
+	@rm -fr $(vms_v1alpha1_pb_gos) $(vms_v1alpha1_pb_docs) $(vms_v1alpha1_pb_pythons) $(vms_v1alpha1_k8s_gos)
+
+
+#####################
 # envoy/...
 #####################
 
@@ -488,6 +515,7 @@ all_protos := \
 	$(rbac_v1alpha1_protos) \
 	$(authn_v1alpha1_protos) \
 	$(security_v1beta1_protos) \
+	$(vms_v1alpha1_protos) \
 	$(type_v1beta1_protos)
 
 all_openapi := \
@@ -504,6 +532,7 @@ all_openapi := \
 	$(rbac_v1alpha1_openapi) \
 	$(authn_v1alpha1_openapi) \
 	$(security_v1beta1_openapi) \
+	$(vms_v1alpha1_openapi) \
 	$(type_v1beta1_openapi)
 
 all_openapi_crd := kubernetes/customresourcedefinitions.gen.yaml
@@ -542,6 +571,7 @@ clean: \
 	clean-policy \
 	clean-annotations \
 	clean-openapi-schema \
+	clean-vms \
 	clean-security \
 	clean-type \
 	clean-openapi-crd

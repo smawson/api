@@ -1,0 +1,74 @@
+---
+title: istio.vms.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 2
+---
+<h2 id="Endpoint">Endpoint</h2>
+<section>
+<p>Endpoint defines the addresses of the workload entry.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Endpoint-addresses">
+<td><code>addresses</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>List of addresses that are part of this workload.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WorkloadEntry">WorkloadEntry</h2>
+<section>
+<p>WorkloadEntry describes an unmanaged workload.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadEntry-service_account_name">
+<td><code>serviceAccountName</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional service account that the workload entry runs as.
+If unspecified the workload entry will use the default service account of the namespace it belongs to.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadEntry-endpoints">
+<td><code>endpoints</code></td>
+<td><code><a href="#Endpoint">Endpoint[]</a></code></td>
+<td>
+<p>List of endpoints that are part of this workload.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

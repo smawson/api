@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.vms.v1alpha1.WorkloadEntry": {
+        "description": "WorkloadEntry describes an unmanaged workload.",
+        "type": "object",
+        "properties": {
+          "serviceAccountName": {
+            "description": "Optional service account that the workload entry runs as. If unspecified the workload entry will use the default service account of the namespace it belongs to.",
+            "type": "string",
+            "format": "string"
+          },
+          "endpoints": {
+            "description": "List of endpoints that are part of this workload.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.vms.v1alpha1.Endpoint"
+            }
+          }
+        }
+      },
+      "istio.vms.v1alpha1.Endpoint": {
+        "description": "Endpoint defines the addresses of the workload entry.",
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "description": "List of addresses that are part of this workload.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -33,6 +33,8 @@ directories:
     - mode: all
   security/v1beta1:
     - mode: perFile
+  vms/v1alpha1:
+    - mode: perFile
 
 
 # All is used when generating all types referenced in the above directories to
